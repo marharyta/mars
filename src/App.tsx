@@ -1,15 +1,37 @@
+import { useAuth, AuthProvider } from "./auth/AuthProvider";
+import { Login } from "./Login";
+import { Dashboard } from "./Dashboard";
+import { useState, useEffect } from "react";
+
+const AppContent = () => {
+  const { token } = useAuth();
+  const [view, setView] = useState<"login" | "dashboard">("login");
+
+  useEffect(() => {
+    if (token) {
+      setView("dashboard");
+    } else {
+      setView("login");
+    }
+  }, [token]);
+
+  return (
+    <div>
+      {view === "login" && (
+        <Login onLoginSuccess={() => setView("dashboard")} />
+      )}
+      {view === "dashboard" && <Dashboard />}
+    </div>
+  );
+};
+
 function App() {
   return (
     <>
       <h1>Vite + React</h1>
-      <div className="card">
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </>
   );
 }
