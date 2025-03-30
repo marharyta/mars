@@ -42,8 +42,8 @@ function App() {
   const [user] = useAtom(userAtom);
   return (
     <>
+      {user?.user_id}
       <AuthProvider>
-        {user?.user_id}
         <AppContent />
       </AuthProvider>
     </>

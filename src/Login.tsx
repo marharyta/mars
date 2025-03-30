@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "./auth/AuthProvider";
-import { userAtom } from "./atoms/user";
+import { setUserAtom } from "./atoms/user";
 import { useSetAtom } from "jotai";
 import type { LoginProps } from "./types";
 
@@ -9,7 +9,7 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
   const [password, setPassword] = useState("1234");
   const { login } = useAuth();
 
-  const setUser = useSetAtom(userAtom);
+  const setUser = useSetAtom(setUserAtom);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
