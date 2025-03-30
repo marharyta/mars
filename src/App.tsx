@@ -18,7 +18,11 @@ const AppContent = () => {
   return (
     <div>
       {view === "login" && (
-        <Login onLoginSuccess={() => setView("dashboard")} />
+        <Login
+          onLoginSuccess={() => {
+            setView("dashboard");
+          }}
+        />
       )}
       {view === "dashboard" && <Dashboard />}
     </div>
@@ -28,7 +32,6 @@ const AppContent = () => {
 function App() {
   return (
     <>
-      <h1>Vite + React</h1>
       <AuthProvider>
         <AppContent />
       </AuthProvider>

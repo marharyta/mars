@@ -6,8 +6,8 @@ interface Props {
 }
 
 export const Login = ({ onLoginSuccess }: Props) => {
-  const [user_id, setUserId] = useState("");
-  const [password, setPassword] = useState("");
+  const [user_id, setUserId] = useState("alice");
+  const [password, setPassword] = useState("1234");
   const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
