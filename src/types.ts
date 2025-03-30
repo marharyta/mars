@@ -4,6 +4,11 @@ export interface User {
   password?: string;
 }
 
+export interface Ore {
+  ore_sites: string;
+  timestamp: string;
+}
+
 export interface DashboardProps {
   onLogoutSuccess: () => void;
 }

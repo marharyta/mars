@@ -4,7 +4,6 @@ import { Dashboard } from "./Dashboard";
 import { useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import { tokenAtom } from "./atoms/auth";
-import { userAtom } from "./atoms/user";
 
 const AppContent = () => {
   const [token] = useAtom(tokenAtom);
@@ -39,14 +38,10 @@ const AppContent = () => {
 };
 
 function App() {
-  const [user] = useAtom(userAtom);
   return (
-    <>
-      {user?.user_id}
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
-    </>
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 

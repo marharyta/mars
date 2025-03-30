@@ -1,15 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "./auth/AuthProvider";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { tokenAtom } from "./atoms/auth";
-import { userAtom } from "./atoms/user";
-import type { DashboardProps } from "./types";
+import { setUserAtom, userAtom } from "./atoms/user";
+import type { DashboardProps, Ore } from "./types";
 
-export const Dashboard = ({ onLogoutSuccess }: DashboardProps) => {
+const User = () => {
   const [token] = useAtom(tokenAtom);
   const [user] = useAtom(userAtom);
-  const { logout } = useAuth();
-
+  const setUser = useSetAtom(setUserAtom);
   useEffect(() => {
     if (user?.user_id) {
       const fetchUsers = async () => {
@@ -21,15 +20,60 @@ export const Dashboard = ({ onLogoutSuccess }: DashboardProps) => {
         if (!res.ok) return;
 
         const data = await res.json();
-        console.log("user", data, user);
+        setUser(data);
       };
       fetchUsers();
     }
-  }, [token, user]);
+  }, [token, user, setUser]);
+
+  return (
+    <section>
+      {user?.name}
+      {user?.user_id}
+    </section>
+  );
+};
+
+const Data = () => {
+  const [token] = useAtom(tokenAtom);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch(`http://localhost:8080/acquisitions`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) return;
+
+      const data = await res.json();
+      setData(data);
+      console.log("data", data);
+    };
+    fetchData();
+  }, []);
+
+  return (
+    <section>
+      {data.map((ore: Ore) => (
+        <div key={ore?.timestamp}>
+          {ore?.ore_sites}
+          {ore?.timestamp}
+        </div>
+      ))}
+    </section>
+  );
+};
+
+export const Dashboard = ({ onLogoutSuccess }: DashboardProps) => {
+  const { logout } = useAuth();
 
   return (
     <div>
       <h2>Dashboard</h2>
+      <User />
+      <Data />
       <button
         onClick={async () => {
           await logout();
@@ -38,11 +82,6 @@ export const Dashboard = ({ onLogoutSuccess }: DashboardProps) => {
       >
         Logout
       </button>
-      <ul>
-        {/* <li key={user.user_id}>
-          {user.name} ({user.user_id}) ({user.password})
-        </li> */}
-      </ul>
     </div>
   );
 };
