@@ -7,11 +7,21 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:e2e": "playwright test",
+    "test:e2e-ui": "playwright test --ui"
   },
   "dependencies": {
+    "@playwright/test": "^1.51.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@vitest/browser": "^3.0.9",
     "antd": "^5.24.5",
     "jotai": "^2.12.2",
+    "jsdom": "^26.0.0",
+    "playwright": "^1.51.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.4.0"
@@ -22,6 +32,7 @@
     "@types/react-dom": "^19.0.4",
     "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/ui": "^3.0.9",
     "eslint": "^9.21.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
