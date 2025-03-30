@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "./auth/AuthProvider";
 import { useAtom, useSetAtom } from "jotai";
 import { tokenAtom } from "./atoms/auth";
 import { setUserAtom, userAtom } from "./atoms/user";
 import type { DashboardProps, Ore } from "./types";
-import { Button, Typography, Layout, Card, List } from "antd";
+import { Button, Typography, Layout, Card, List, Col, Row } from "antd";
+import { useQuery } from "@tanstack/react-query";
 
 const { Title } = Typography;
 const { Header, Content } = Layout;
@@ -47,28 +48,29 @@ const Scene = () => {
 
 const Data = () => {
   const [token] = useAtom(tokenAtom);
-  const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch(`http://localhost:8080/acquisitions`, {
+  const {
+    data: acquisitions,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["acquisitions", 1],
+    queryFn: () =>
+      fetch(`http://localhost:8080/acquisitions`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
-      if (!res.ok) return;
+      }).then((res) => res.json()),
+  });
 
-      const data = await res.json();
-      setData(data);
-      console.log("data", data);
-    };
-    fetchData();
-  }, []);
+  if (error) <p>Error loading acquisitions</p>;
+  if (isLoading) <p>Is loading aquisitions</p>;
 
   return (
-    <Card title="Acquisition Data" style={{ marginTop: 20 }}>
+    <Card title="Acquisition Data">
+      {/*TODO: add react-virtualized later*/}
       <List
-        dataSource={data}
+        dataSource={acquisitions}
         renderItem={(ore: Ore) => (
           <List.Item>
             {ore?.ore_sites} - {ore?.timestamp}
@@ -83,16 +85,25 @@ export const Dashboard = ({ onLogoutSuccess }: DashboardProps) => {
   const { logout } = useAuth();
 
   return (
-    <Layout style={{ padding: 24 }}>
+    <Layout>
       <Header>
         <Title style={{ color: "white" }} level={2}>
           Dashboard
         </Title>
       </Header>
       <Content style={{ padding: 24 }}>
-        <User />
-        <Data />
-        <Scene />
+        <Row>
+          <Col span={6}>
+            <User />
+          </Col>
+          <Col span={6}>
+            <Data />
+          </Col>
+          <Col span={12}>
+            <Scene />
+          </Col>
+        </Row>
+
         <Button
           type="primary"
           danger

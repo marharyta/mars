@@ -4,7 +4,11 @@ import { Dashboard } from "./Dashboard";
 import { useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import { tokenAtom } from "./atoms/auth";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import "./styles.css";
+
+const queryClient = new QueryClient();
 
 const AppContent = () => {
   const [token] = useAtom(tokenAtom);
@@ -41,7 +45,9 @@ const AppContent = () => {
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <QueryClientProvider client={queryClient}>
+        <AppContent />
+      </QueryClientProvider>
     </AuthProvider>
   );
 }
