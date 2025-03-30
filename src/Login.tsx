@@ -3,6 +3,9 @@ import { useAuth } from "./auth/AuthProvider";
 import { setUserAtom } from "./atoms/user";
 import { useSetAtom } from "jotai";
 import type { LoginProps } from "./types";
+import { Input, Button, Typography, Form, Layout, Card } from "antd";
+
+const { Title } = Typography;
 
 export const Login = ({ onLoginSuccess }: LoginProps) => {
   const [user_id, setUserId] = useState("alice");
@@ -23,20 +26,36 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1 className="text-3xl font-bold underline">Login</h1>
-      <input
-        value={user_id}
-        onChange={(e) => setUserId(e.target.value)}
-        placeholder="User ID"
-      />
-      <input
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        type="password"
-        placeholder="Password"
-      />
-      <button type="submit">Login</button>
-    </form>
+    <Layout
+      style={{
+        minHeight: "100vh",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Card title={<Title level={2}>Login</Title>} style={{ width: 300 }}>
+        <Form layout="vertical" onFinish={handleSubmit}>
+          <Form.Item label="User ID" name="user_id">
+            <Input
+              value={user_id}
+              onChange={(e) => setUserId(e.target.value)}
+              placeholder="User ID"
+            />
+          </Form.Item>
+          <Form.Item label="Password" name="password">
+            <Input.Password
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Login
+            </Button>
+          </Form.Item>
+        </Form>
+      </Card>
+    </Layout>
   );
 };
