@@ -24,7 +24,7 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Login</h2>
+      <h1 className="text-3xl font-bold underline">Login</h1>
       <input
         value={user_id}
         onChange={(e) => setUserId(e.target.value)}

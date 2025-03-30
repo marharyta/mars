@@ -4,6 +4,7 @@ import { Dashboard } from "./Dashboard";
 import { useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import { tokenAtom } from "./atoms/auth";
+import "./styles.css";
 
 const AppContent = () => {
   const [token] = useAtom(tokenAtom);
