@@ -1,22 +1,24 @@
 import { useState } from "react";
 import { useAuth } from "./auth/AuthProvider";
+import { userAtom } from "./atoms/user";
+import { useSetAtom } from "jotai";
+import type { LoginProps } from "./types";
 
-interface Props {
-  onLoginSuccess: () => void;
-}
-
-export const Login = ({ onLoginSuccess }: Props) => {
+export const Login = ({ onLoginSuccess }: LoginProps) => {
   const [user_id, setUserId] = useState("alice");
   const [password, setPassword] = useState("1234");
   const { login } = useAuth();
 
+  const setUser = useSetAtom(userAtom);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      setUser({ user_id: user_id, name: "", password: "" });
       await login(user_id, password);
       onLoginSuccess();
-    } catch {
-      alert("Login failed!");
+    } catch (error) {
+      console.error("Login failed!", error);
     }
   };
 

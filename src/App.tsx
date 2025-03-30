@@ -1,10 +1,13 @@
-import { useAuth, AuthProvider } from "./auth/AuthProvider";
+import { AuthProvider } from "./auth/AuthProvider";
 import { Login } from "./Login";
 import { Dashboard } from "./Dashboard";
 import { useState, useEffect } from "react";
+import { useAtom } from "jotai";
+import { tokenAtom } from "./atoms/auth";
+import { userAtom } from "./atoms/user";
 
 const AppContent = () => {
-  const { token } = useAuth();
+  const [token] = useAtom(tokenAtom);
   const [view, setView] = useState<"login" | "dashboard">("login");
 
   useEffect(() => {
@@ -24,15 +27,23 @@ const AppContent = () => {
           }}
         />
       )}
-      {view === "dashboard" && <Dashboard />}
+      {view === "dashboard" && (
+        <Dashboard
+          onLogoutSuccess={() => {
+            setView("login");
+          }}
+        />
+      )}
     </div>
   );
 };
 
 function App() {
+  const [user] = useAtom(userAtom);
   return (
     <>
       <AuthProvider>
+        {user?.user_id}
         <AppContent />
       </AuthProvider>
     </>

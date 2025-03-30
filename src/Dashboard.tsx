@@ -1,38 +1,47 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "./auth/AuthProvider";
+import { useAtom } from "jotai";
+import { tokenAtom } from "./atoms/auth";
+import { userAtom } from "./atoms/user";
+import type { DashboardProps } from "./types";
 
-interface User {
-  user_id: string;
-  name: string;
-}
-
-export const Dashboard = () => {
-  const { token, logout } = useAuth();
-  const [users, setUsers] = useState<User[]>([]);
+export const Dashboard = ({ onLogoutSuccess }: DashboardProps) => {
+  const [token] = useAtom(tokenAtom);
+  const [user] = useAtom(userAtom);
+  const { logout } = useAuth();
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const res = await fetch("/users", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      setUsers(data);
-    };
-    fetchUsers();
-  }, [token]);
+    if (user?.user_id) {
+      const fetchUsers = async () => {
+        const res = await fetch(`http://localhost:8080/users/${user.user_id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!res.ok) return;
+
+        const data = await res.json();
+        console.log("user", data, user);
+      };
+      fetchUsers();
+    }
+  }, [token, user]);
 
   return (
     <div>
       <h2>Dashboard</h2>
-      <button onClick={logout}>Logout</button>
+      <button
+        onClick={async () => {
+          await logout();
+          onLogoutSuccess();
+        }}
+      >
+        Logout
+      </button>
       <ul>
-        {users.map((user) => (
-          <li key={user.user_id}>
-            {user.name} ({user.user_id})
-          </li>
-        ))}
+        {/* <li key={user.user_id}>
+          {user.name} ({user.user_id}) ({user.password})
+        </li> */}
       </ul>
     </div>
   );

@@ -6,16 +6,17 @@ import {
   ReactNode,
 } from "react";
 import { setCookie, getCookie, deleteCookie } from "../utils/cookies";
-interface AuthContextType {
-  token: string | null;
-  login: (user_id: string, password: string) => Promise<void>;
-  logout: () => void;
-}
+import { useSetAtom } from "jotai";
+import { userAtom } from "../atoms/user";
+import { setTokenAtom } from "../atoms/auth";
+import type { AuthContextType } from "../types";
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
+  const setUser = useSetAtom(userAtom);
+  const setTokenAtomState = useSetAtom(setTokenAtom);
 
   useEffect(() => {
     const cookieToken = getCookie("access_token");
@@ -34,11 +35,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const data = await response.json();
     setCookie("access_token", data.access, 1); // 1-day expiration
     setToken(data.access);
+    setTokenAtomState(data.access);
   };
 
   const logout = () => {
     deleteCookie("access_token");
     setToken(null);
+    setUser(null);
+    setTokenAtomState(null);
   };
 
   return (
