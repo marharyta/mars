@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { OresHistogram } from "./dashboard/OreHistogram";
 import { DataList } from "./dashboard/List";
 import { User } from "./dashboard/User";
+import { useErrorBoundary } from "react-error-boundary";
 
 const { Title } = Typography;
 const { Header, Content } = Layout;
@@ -17,6 +18,7 @@ const Scene = () => {
 
 const Data = () => {
   const [token] = useAtom(tokenAtom);
+  const { resetBoundary } = useErrorBoundary();
 
   {
     /* I wish there was pagination */
@@ -36,8 +38,15 @@ const Data = () => {
       }).then((res) => res.json()),
   });
 
-  if (error) <p>Error loading acquisitions</p>;
-  if (isLoading) <p>Is loading aquisitions</p>;
+  if (error)
+    return (
+      <div role="alert">
+        <p>Something went wrong:</p>
+        <pre style={{ color: "red" }}>{error.message}</pre>
+        <Button onClick={resetBoundary}>Try again</Button>
+      </div>
+    );
+  if (isLoading) return <p>Is loading aquisitions</p>;
 
   return (
     <>

@@ -22,3 +22,10 @@ export interface AuthContextType {
   login: (user_id: string, password: string) => Promise<void>;
   logout: () => void;
 }
+
+export const errorMap: Record<string, string> = {
+  TypeError: "Oops! Something is wrong with the data.",
+  RangeError: "Whoa! Something went out of bounds.",
+  SyntaxError: "Looks like there’s a syntax problem in the code.",
+  DefaultError: "Something unexpected happened. Please try again.",
+};

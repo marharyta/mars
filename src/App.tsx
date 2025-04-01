@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConfigProvider } from "antd";
 import tailwindColors from "tailwindcss/colors";
 import "./styles.css";
+import { errorMap } from "./types";
 
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -47,9 +48,39 @@ const AppContent = () => {
   );
 };
 
+const logError = (error: Error, info: { componentStack: string }) => {
+  // Do something with the error, e.g. log to an external API
+};
+
+function Fallback({
+  error,
+  resetErrorBoundary,
+}: {
+  error: Error;
+  resetErrorBoundary?: () => void;
+}) {
+  // TODO: Call resetErrorBoundary() to reset the error boundary and retry the render.
+  const errorName = error.name || "DefaultError";
+  const message = errorMap[errorName] || errorMap.DefaultError;
+
+  return (
+    <div className="p-4 bg-red-50 border border-red-300 rounded text-red-800">
+      <h2 className="font-bold mb-2">Error</h2>
+      <p>{message}</p>
+      <pre style={{ color: "red" }}>{error.message}</pre>
+    </div>
+  );
+}
+
 function App() {
   return (
-    <ErrorBoundary fallback={<div>Something went wrong</div>}>
+    <ErrorBoundary
+      FallbackComponent={Fallback}
+      onError={logError}
+      onReset={(details) => {
+        // TODO: Reset the state of your app so the error doesn't happen again
+      }}
+    >
       <AuthProvider>
         <QueryClientProvider client={queryClient}>
           <ConfigProvider
