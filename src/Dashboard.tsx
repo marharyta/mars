@@ -1,85 +1,26 @@
 import { useAuth } from "./auth/AuthProvider";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import { tokenAtom } from "./atoms/auth";
-import { setUserAtom, userAtom } from "./atoms/user";
-import type { DashboardProps, Ore } from "./types";
-import { Button, Typography, Layout, Card, List, Col, Row } from "antd";
+import type { DashboardProps } from "./types";
+import { Button, Typography, Layout, Card, Col, Row } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { OresHistogram } from "./OreHistogram";
+import { OresHistogram } from "./dashboard/OreHistogram";
+import { DataList } from "./dashboard/List";
+import { User } from "./dashboard/User";
 
 const { Title } = Typography;
 const { Header, Content } = Layout;
-
-const User = ({ children }: React.ReactElement) => {
-  const [token] = useAtom(tokenAtom);
-  const [user] = useAtom(userAtom);
-  const setUser = useSetAtom(setUserAtom);
-
-  const {
-    data: userData,
-    isLoading: isLoadingUser,
-    error: errorFetchingUser,
-  } = useQuery({
-    queryKey: ["user", 1],
-    queryFn: async () => {
-      if (user?.user_id) {
-        const res = fetch(`http://localhost:8080/users/${user.user_id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }).then((res) => res.json());
-        const data = await res;
-        setUser(data);
-        return data;
-      }
-    },
-  });
-
-  console.log("user", userData, isLoadingUser, errorFetchingUser);
-
-  // TODO: nice loading state + nice error state
-  if (errorFetchingUser) return <p>Error loading user</p>;
-  if (isLoadingUser) return <p>Is loading user</p>;
-
-  return (
-    <Card title="User Info">
-      <p>
-        <strong>Name:</strong> {user?.name}
-      </p>
-      <p>
-        <strong>User ID:</strong> {user?.user_id}
-      </p>
-      {children}
-    </Card>
-  );
-};
 
 const Scene = () => {
   return <div id="scene-container">Mars goes here</div>;
 };
 
-const DataList = ({ data }) => {
-  {
-    /*TODO: 
-        1. Sort by latest ascending
-        2. add react-virtualized later
-        3. Add UI
-      */
-  }
-  return (
-    <List
-      dataSource={data}
-      renderItem={(ore: Ore) => (
-        <List.Item>
-          {ore?.ore_sites} - {ore?.timestamp}
-        </List.Item>
-      )}
-    />
-  );
-};
-
 const Data = () => {
   const [token] = useAtom(tokenAtom);
+
+  {
+    /* I wish there was pagination */
+  }
 
   const {
     data: acquisitions,
@@ -130,7 +71,7 @@ export const Dashboard = ({ onLogoutSuccess }: DashboardProps) => {
           <Col span={12}>
             <Scene />
           </Col>
-          <Col span={6}>
+          <Col span={12}>
             <User>
               <Button
                 type="primary"

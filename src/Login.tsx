@@ -4,6 +4,7 @@ import { setUserAtom } from "./atoms/user";
 import { useSetAtom } from "jotai";
 import type { LoginProps } from "./types";
 import { Layout, Button, Typography, Form, Input, Card } from "antd";
+
 const { Title } = Typography;
 const { Content } = Layout;
 
