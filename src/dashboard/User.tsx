@@ -29,8 +29,6 @@ export const User = ({ children }: React.ReactElement) => {
     },
   });
 
-  console.log("user", userData, isLoadingUser, errorFetchingUser);
-
   // TODO: nice loading state + nice error state
   if (errorFetchingUser) return <p>Error loading user</p>;
   if (isLoadingUser) return <p>Is loading user</p>;

@@ -45,7 +45,7 @@ export const OresHistogram: React.FC = ({ data }) => {
         fields: ["time", "count"],
       },
       //TODO: add this to cause error
-      //   color: `${colors.blue[400]}`,
+      // color: `${colors.blue[400]}`,
     });
 
     histogram.render();

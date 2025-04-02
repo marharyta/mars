@@ -1,13 +1,10 @@
-import { useAuth } from "./auth/AuthProvider";
-import { useAtom } from "jotai";
-import { tokenAtom } from "./atoms/auth";
 import type { DashboardProps } from "./types";
-import { Button, Typography, Layout, Card, Col, Row } from "antd";
-import { useQuery } from "@tanstack/react-query";
+import { Button, Typography, Layout, Card } from "antd";
+import { User } from "./dashboard/User";
+import { DashboardLayout, DashboardCell } from "./dashboard/Layout";
+import { AcquisitionsFetcher } from "./dashboard/Aquisitions";
 import { OresHistogram } from "./dashboard/OreHistogram";
 import { DataList } from "./dashboard/List";
-import { User } from "./dashboard/User";
-import { useErrorBoundary } from "react-error-boundary";
 
 const { Title } = Typography;
 const { Header, Content } = Layout;
@@ -16,86 +13,57 @@ const Scene = () => {
   return <div id="scene-container">Mars goes here</div>;
 };
 
-const Data = () => {
-  const [token] = useAtom(tokenAtom);
-  const { resetBoundary } = useErrorBoundary();
-
-  {
-    /* I wish there was pagination */
-  }
-
-  const {
-    data: acquisitions,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["acquisitions", 1],
-    queryFn: () =>
-      fetch(`http://localhost:8080/acquisitions`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }).then((res) => res.json()),
-  });
-
-  if (error)
-    return (
-      <div role="alert">
-        <p>Something went wrong:</p>
-        <pre style={{ color: "red" }}>{error.message}</pre>
-        <Button onClick={resetBoundary}>Try again</Button>
-      </div>
-    );
-  if (isLoading) return <p>Is loading aquisitions</p>;
-
-  return (
-    <>
-      <Col span={12}>
-        <Card title="Acquisition Data">
-          <OresHistogram data={acquisitions} />
-        </Card>
-      </Col>
-      <Col span={12}>
-        <Card title="Acquisition Data List">
-          <DataList data={acquisitions}></DataList>
-        </Card>
-      </Col>
-    </>
-  );
-};
-
 export const Dashboard = ({ onLogoutSuccess }: DashboardProps) => {
-  const { logout } = useAuth();
-
+  // TODO: there is probably a more elegant way to design fetcher for aquisitions with atoms, but for now
+  // we use standard separation of concerns method to separate them
   return (
     <Layout>
       <Header className="flex flex-row justify-baseline items-baseline">
         <Title level={2} className="text-xs">
-          Dashboard
+          dashboard
         </Title>
       </Header>
       <Content className="p-8">
-        <Row gutter={[16, 16]}>
-          <Data />
-          <Col span={12}>
-            <Scene />
-          </Col>
-          <Col span={12}>
-            <User>
-              <Button
-                type="primary"
-                danger
-                onClick={async () => {
-                  await logout();
-                  onLogoutSuccess();
-                }}
-                style={{ marginTop: 20 }}
-              >
-                Logout
-              </Button>
-            </User>
-          </Col>
-        </Row>
+        <DashboardLayout>
+          {({ api }) => (
+            <>
+              <AcquisitionsFetcher>
+                {({ state }) => (
+                  <>
+                    <DashboardCell>
+                      <Card title="Acquisition Data">
+                        <OresHistogram data={state} />
+                      </Card>
+                    </DashboardCell>
+                    <DashboardCell>
+                      <Card title="Acquisition Data List">
+                        <DataList data={state}></DataList>
+                      </Card>
+                    </DashboardCell>
+                  </>
+                )}
+              </AcquisitionsFetcher>
+              <DashboardCell>
+                <Scene />
+              </DashboardCell>
+              <DashboardCell>
+                <User>
+                  <Button
+                    type="primary"
+                    danger
+                    onClick={async () => {
+                      await api.logout();
+                      onLogoutSuccess();
+                    }}
+                    style={{ marginTop: 20 }}
+                  >
+                    Logout
+                  </Button>
+                </User>
+              </DashboardCell>
+            </>
+          )}
+        </DashboardLayout>
       </Content>
     </Layout>
   );

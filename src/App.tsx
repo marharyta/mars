@@ -13,7 +13,6 @@ import { errorMap } from "./types";
 import { ErrorBoundary } from "react-error-boundary";
 
 const colors = tailwindColors;
-
 const queryClient = new QueryClient();
 
 const AppContent = () => {
@@ -49,13 +48,13 @@ const AppContent = () => {
 };
 
 const logError = (error: Error, info: { componentStack: string }) => {
-  // Do something with the error, e.g. log to an external API
+  // TODO: Do something with the error, e.g. log to an external API
 };
 
 function Fallback({
   error,
-  resetErrorBoundary,
-}: {
+}: // resetErrorBoundary,
+{
   error: Error;
   resetErrorBoundary?: () => void;
 }) {

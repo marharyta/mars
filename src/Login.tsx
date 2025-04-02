@@ -16,9 +16,8 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
 
   const setUser = useSetAtom(setUserAtom);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async () => {
     //TODO: fix that, git broken after introduction of ant design
-    e.preventDefault();
     try {
       setUser({ user_id: user_id, name: "", password: "" });
       await login(user_id, password);
