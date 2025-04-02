@@ -5,14 +5,11 @@ import tailwindColors from "tailwindcss/colors";
 import type { Ore } from "../types";
 import { zone } from "../atoms/zone";
 import { useAtom } from "jotai";
+import { groupByDay } from "../utils/groupBy";
 
 const colors = tailwindColors;
 
 export const OresHistogram = ({ data }: { data: Ore[] }) => {
-  const sortedData = [...data].sort((a, b) =>
-    a.timestamp > b.timestamp ? 1 : -1
-  );
-
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<Column>(null);
   const [timeZone] = useAtom(zone);
@@ -20,30 +17,9 @@ export const OresHistogram = ({ data }: { data: Ore[] }) => {
   console.log("colors.blue[400]", colors.blue[400]);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-
-    const timeBuckets = new Map<string, number>();
-
-    sortedData?.forEach(({ timestamp }) => {
-      const day = DateTime.fromSeconds(Number(timestamp))
-        .setZone(timeZone)
-        .toFormat("MMM dd");
-
-      timeBuckets.set(day, (timeBuckets.get(day) || 0) + 1);
-    });
-
-    const dataCopy = [...data];
-
-    dataCopy.forEach(({ timestamp, ore_sites }) => {
-      const day = DateTime.fromSeconds(Number(timestamp))
-        .setZone(timeZone)
-        .toFormat("MMM dd");
-
-      timeBuckets.set(day, (timeBuckets.get(day) || 0) + ore_sites);
-    });
-
-    const histogramData = Array.from(timeBuckets.entries())
-      .map(([time, ores]) => ({ time, ores }))
+    if (!containerRef.current || !data.length) return;
+    const histogramData = groupByDay(data, timeZone)
+      .map((point) => ({ time: point.date, ores: point.totalOreSites }))
       .sort(
         (a, b) =>
           DateTime.fromFormat(a.time, "MMM dd").toMillis() -
@@ -55,7 +31,7 @@ export const OresHistogram = ({ data }: { data: Ore[] }) => {
       xField: "time",
       yField: "ores",
       xAxis: {
-        title: { text: "Date" },
+        title: { text: "Date (Month Day)" },
       },
       yAxis: {
         title: { text: "Total Ore Sites" },
