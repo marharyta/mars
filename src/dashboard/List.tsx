@@ -1,18 +1,20 @@
 import { List, ListRowRenderer, AutoSizer } from "react-virtualized";
 import { DateTime } from "luxon";
 import type { Ore } from "../types";
+import { zone } from "../atoms/zone";
+import { useAtom } from "jotai";
 
 export const VirtualizedOresList = ({ data }: { data: Ore[] }) => {
+  const [timeZone] = useAtom(zone);
   // Sort by latest timestamp first
   const sortedData = [...data].sort((a, b) => b.timestamp - a.timestamp);
   console.log("sortedData?.length", sortedData?.length);
   const rowRenderer: ListRowRenderer = ({ index, key, style }) => {
     const { ore_sites, timestamp } = sortedData[index];
 
-    const userZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const formattedTime = DateTime.fromSeconds(Number(timestamp))
-      .setZone(userZone)
-      .toFormat("yyyy-MM-dd HH:mm:ss");
+      .setZone(timeZone)
+      .toFormat("MMM dd HH:mm:ss");
 
     //TODO: reafctor this
     return (
@@ -52,7 +54,7 @@ export const DataList = ({ data }) => {
   {
     /*
     TODO: 
-        1. Sort by latest ascending
+        1. Sort by latest ascending - done
         2. add react-virtualized later - done
         3. Add UI
     */
