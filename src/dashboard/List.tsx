@@ -1,14 +1,20 @@
 import { List, ListRowRenderer, AutoSizer } from "react-virtualized";
-import dayjs from "dayjs";
+import { DateTime } from "luxon";
 import type { Ore } from "../types";
 
-export const VirtualizedOresList: React.FC = ({ data }: { data?: Ore[] }) => {
+export const VirtualizedOresList = ({ data }: { data: Ore[] }) => {
+  // Sort by latest timestamp first
+  const sortedData = [...data].sort((a, b) => b.timestamp - a.timestamp);
+  console.log("sortedData?.length", sortedData?.length);
   const rowRenderer: ListRowRenderer = ({ index, key, style }) => {
-    const { ore_sites, timestamp } = data[index];
-    const formattedTime = dayjs
-      .unix(parseInt(timestamp))
-      .format("YYYY-MM-DD HH:mm:ss");
+    const { ore_sites, timestamp } = sortedData[index];
 
+    const userZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const formattedTime = DateTime.fromSeconds(Number(timestamp))
+      .setZone(userZone)
+      .toFormat("yyyy-MM-dd HH:mm:ss");
+
+    //TODO: reafctor this
     return (
       <div
         key={key}
@@ -32,7 +38,7 @@ export const VirtualizedOresList: React.FC = ({ data }: { data?: Ore[] }) => {
           <List
             width={width}
             height={height}
-            rowCount={data?.length}
+            rowCount={sortedData?.length}
             rowHeight={60}
             rowRenderer={rowRenderer}
           />

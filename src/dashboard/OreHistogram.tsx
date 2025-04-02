@@ -1,13 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Column } from "@antv/g2plot";
-import dayjs from "dayjs";
+import { DateTime } from "luxon";
 import tailwindColors from "tailwindcss/colors";
+import type { Ore } from "../types";
 
 const colors = tailwindColors;
 
-export const OresHistogram: React.FC = ({ data }) => {
+export const OresHistogram = ({ data }: { data: Ore[] }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const chartRef = useRef<Column>();
+  const chartRef = useRef<Column>(null);
 
   console.log("colors.blue[400]", colors.blue[400]);
 
@@ -17,7 +18,7 @@ export const OresHistogram: React.FC = ({ data }) => {
     const timeBuckets = new Map<string, number>();
 
     data?.forEach(({ timestamp }) => {
-      const day = dayjs.unix(timestamp).format("YYYY-MM-DD");
+      const day = DateTime.fromSeconds(timestamp).toFormat("yyyy-MM-dd");
       timeBuckets.set(day, (timeBuckets.get(day) || 0) + 1);
     });
 
