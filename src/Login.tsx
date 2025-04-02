@@ -3,15 +3,16 @@ import { useAuth } from "./auth/AuthProvider";
 import { setUserAtom } from "./atoms/user";
 import { useSetAtom } from "jotai";
 import type { LoginProps } from "./types";
-import { Layout, Button, Typography, Form, Input, Card } from "antd";
+import { Layout, Typography, Form, Input, Card } from "antd";
+import { GradientButton } from "./components/ui/gradient-button";
 
 const { Title } = Typography;
 const { Content } = Layout;
 
 export const Login = ({ onLoginSuccess }: LoginProps) => {
   //TODO: remove hardcoded values
-  const [user_id, setUserId] = useState("alice");
-  const [password, setPassword] = useState("1234");
+  const [user_id, setUserId] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const { login } = useAuth();
 
   const setUser = useSetAtom(setUserAtom);
@@ -53,9 +54,9 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
               />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit" block>
+              <GradientButton className="w-full" type="submit">
                 Login
-              </Button>
+              </GradientButton>
             </Form.Item>
           </Form>
         </Card>
