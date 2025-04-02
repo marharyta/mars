@@ -5,8 +5,8 @@ export interface User {
 }
 
 export interface Ore {
-  ore_sites: string;
-  timestamp: string;
+  ore_sites: number;
+  timestamp: number;
 }
 
 export interface DashboardProps {

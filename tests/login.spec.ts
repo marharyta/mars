@@ -18,3 +18,5 @@ test.describe("Login flow", () => {
     await expect(page.locator("h2")).toHaveText(/dashboard/i);
   });
 });
+
+// TODO: create tests to user fetching and data fetching
