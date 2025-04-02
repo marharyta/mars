@@ -1,23 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import { useErrorBoundary } from "react-error-boundary";
-import { Button } from "antd";
-import type { Ore } from "../types";
 import { useAtom } from "jotai";
 import { tokenAtom } from "../atoms/auth";
-import { ReactNode } from "react";
+import { useRef } from "react";
 
-// Container component
-export const AcquisitionsFetcher = ({
-  children,
-}: {
-  children: (renderProps: { state: Ore[] }) => ReactNode;
-}) => {
+export const useAcquisitionsFetcher = () => {
   const [token] = useAtom(tokenAtom);
-  const { resetBoundary } = useErrorBoundary();
+  const previousDataRef = useRef(null);
 
   const {
-    data: acquisitions,
-    isLoading,
+    data,
+    isLoading: loading,
     error,
   } = useQuery({
     queryKey: ["acquisitions", 1],
@@ -27,29 +19,31 @@ export const AcquisitionsFetcher = ({
           Authorization: `Bearer ${token}`,
         },
       }).then((res) => res.json()),
+    refetchInterval: 3000,
+    refetchIntervalInBackground: true,
+    select: (newData) => {
+      const prev = previousDataRef.current;
+
+      const isEqual =
+        Array.isArray(prev) &&
+        prev.length === newData.length &&
+        prev.every((item, index) => {
+          const newItem = newData[index];
+          return (
+            item.timestamp === newItem.timestamp &&
+            item.ore_sites === newItem.ore_sites
+          );
+        });
+
+      if (!isEqual) {
+        previousDataRef.current = newData;
+        return newData.sort((a, b) => b.timestamp - a.timestamp);
+      }
+
+      // If equal, return the previous to avoid triggering rerenders
+      return prev.sort((a, b) => b.timestamp - a.timestamp);
+    },
   });
 
-  {
-    /* I wish there was pagination */
-  }
-  // if (loading) return <LoadingSpinner />;
-  // if (error) return <ErrorMessage error={error} />;
-  // if (!user) return <NotFound message="User not found" />;
-  if (error)
-    return (
-      <div role="alert">
-        <p>Something went wrong:</p>
-        <pre style={{ color: "red" }}>{error.message}</pre>
-        <Button onClick={resetBoundary}>Try again</Button>
-      </div>
-    );
-  if (isLoading) return <p>Is loading aquisitions</p>;
-
-  return (
-    <>
-      {children({
-        state: acquisitions,
-      })}
-    </>
-  );
+  return { data, loading, error };
 };

@@ -1,56 +1,53 @@
-import { List, ListRowRenderer, AutoSizer } from "react-virtualized";
 import { DateTime } from "luxon";
 import type { Ore } from "../types";
-import { zone } from "../atoms/zone";
-import { useAtom } from "jotai";
+import { Card, Typography, Skeleton } from "antd";
+import { memo } from "react";
+const { Text, Title } = Typography;
 
-export const VirtualizedOresList = ({ data }: { data: Ore[] }) => {
-  const [timeZone] = useAtom(zone);
-  // Sort by latest timestamp first
-  const sortedData = [...data].sort((a, b) => b.timestamp - a.timestamp);
-  console.log("sortedData?.length", sortedData?.length);
-  const rowRenderer: ListRowRenderer = ({ index, key, style }) => {
-    const { ore_sites, timestamp } = sortedData[index];
-
-    const formattedTime = DateTime.fromSeconds(Number(timestamp))
-      .setZone(timeZone)
-      .toFormat("MMM dd HH:mm:ss");
-
-    //TODO: reafctor this
-    return (
-      <div
-        key={key}
-        style={style}
-        className="px-4 py-2 border-b border-gray-200"
-      >
-        <div>
-          <strong>Ores:</strong> {ore_sites}
-        </div>
-        <div>
-          <strong>Time:</strong> {formattedTime}
-        </div>
-      </div>
+const OreSiteCard = memo(
+  ({
+    timestamp,
+    ore_sites,
+    index,
+  }: {
+    timestamp: number;
+    ore_sites: number;
+    index: number;
+  }) => {
+    console.log("OreSiteCard re-render", index);
+    const formattedDate = DateTime.fromSeconds(timestamp).toLocaleString(
+      DateTime.DATE_FULL
     );
-  };
 
-  return (
-    <div style={{ height: 400 }}>
-      <AutoSizer>
-        {({ height, width }) => (
-          <List
-            width={width}
-            height={height}
-            rowCount={sortedData?.length}
-            rowHeight={60}
-            rowRenderer={rowRenderer}
-          />
-        )}
-      </AutoSizer>
-    </div>
-  );
-};
+    return (
+      <Card
+        className="radius-xl shadow"
+        style={{
+          marginBottom: 16,
+        }}
+      >
+        <Title level={5} className="text-sm">
+          Ore Site Update {index}
+        </Title>
+        <Text type="secondary">Report Date: {formattedDate}</Text>
+        <div style={{ marginTop: 12 }}>
+          <Text strong>Total Ore Sites: </Text>
+          <Text>{ore_sites}</Text>
+        </div>
+      </Card>
+    );
+  }
+);
 
-export const DataList = ({ data }) => {
+export const DataList = ({
+  data,
+  loading,
+  error,
+}: {
+  data: Ore[];
+  loading: Boolean;
+  error: any;
+}) => {
   {
     /*
     TODO: 
@@ -59,5 +56,29 @@ export const DataList = ({ data }) => {
         3. Add UI
     */
   }
-  return <VirtualizedOresList data={data} />;
+
+  if (error)
+    return (
+      <div role="alert">
+        <p>Featching aquisitions data</p>
+        <pre>{error.message}</pre>
+      </div>
+    );
+
+  if (loading) return <Skeleton active paragraph={{ rows: 1 }} />;
+
+  return (
+    <ul className="h-[400px] overflow-y-auto">
+      {data?.map((d, index) => (
+        <li key={index}>
+          <OreSiteCard
+            key={index}
+            timestamp={d.timestamp}
+            ore_sites={d.ore_sites}
+            index={index}
+          />
+        </li>
+      ))}
+    </ul>
+  );
 };

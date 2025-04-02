@@ -6,10 +6,30 @@ import type { Ore } from "../types";
 import { zone } from "../atoms/zone";
 import { useAtom } from "jotai";
 import { groupByDay } from "../utils/groupBy";
+import { Skeleton } from "antd";
 
 const colors = tailwindColors;
 
-export const OresHistogram = ({ data }: { data: Ore[] }) => {
+export const OresHistogram = ({
+  data,
+  loading,
+  error,
+}: {
+  data: Ore[];
+  loading: Boolean;
+  error: any;
+}) => {
+  console.log("OresHistogram re-render");
+  if (error)
+    return (
+      <div role="alert">
+        <p>Featching aquisitions data</p>
+        <pre>{error.message}</pre>
+      </div>
+    );
+
+  if (loading) return <Skeleton active paragraph={{ rows: 1 }} />;
+
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<Column>(null);
   const [timeZone] = useAtom(zone);
@@ -17,7 +37,7 @@ export const OresHistogram = ({ data }: { data: Ore[] }) => {
   console.log("colors.blue[400]", colors.blue[400]);
 
   useEffect(() => {
-    if (!containerRef.current || !data.length) return;
+    if (!containerRef.current || !data?.length) return;
     const histogramData = groupByDay(data, timeZone)
       .map((point) => ({ time: point.date, ores: point.totalOreSites }))
       .sort(
