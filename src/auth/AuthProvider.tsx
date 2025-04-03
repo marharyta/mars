@@ -11,10 +11,10 @@ import { setUserAtom } from "../atoms/user";
 import { setTokenAtom } from "../atoms/auth";
 import type { AuthContextType } from "../types";
 
-const SERVER_URL =
-  process.env.APP_ENV === "production"
-    ? "https://server-ancient-butterfly-346.fly.dev"
-    : "http://localhost:8080";
+const SERVER_URL = "https://server-ancient-butterfly-346.fly.dev";
+// process.env.APP_ENV === "production"
+//   ? "https://server-ancient-butterfly-346.fly.dev"
+//   : "http://localhost:8080";
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
