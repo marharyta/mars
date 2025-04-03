@@ -1,26 +1,23 @@
-# Dashboard for Mars
+# Mars Dashboard
 
-# Demo
+## Live Demo
 
-The project has been deployed on fly.io and Vercel and you can find the live version here: https://mars-xi.vercel.app/
+🚀 The project is live on [Mars Dashboard](https://mars-xi.vercel.app/) via Fly.io and Vercel.
 
-## Checklist
+## Features
 
-- [x] A frontend project using `React`, `TypeScript` and `AntDesign` presenting an UI for the above service
-- [x] Using any supporting libraries of your choice
-- [x] It should follow the best practices in general
-- [x] Be creative and provide a useful UI
-- [x] The UI should work on both normal-sized and small screens
-- [x] Write a report for _LARVIS_ improvements
-- [ ] use the `README.md` to clearly describe the parts you left out due to time but think should be there or you would do next
-
-Project setup includes Backend service, that runs locally via Docker.
+✅ Built with **React, TypeScript, and Ant Design** for an interactive UI.
+✅ Supports external libraries for performance and scalability.
+✅ Follows best practices for maintainability.
+✅ The UI should work on both normal-sized and small screens
+✅ Includes a **report for _LARVIS_ improvements**
+✅ Uses the `README.md` to describe the parts left out due to time and what to do next
 
 ## Front End setup approach
 
-- _A frontend project using React, TypeScript and AntDesign as required in the assignment_
-- Using Vite to create bundle modules, ESM as first class citizen approch
-- No SSR, as the dashboard does not requite to be indexed or pre-compiled.
+- Project setup includes Backend service, that runs locally via Docker.
+- Using Vite to create bundle modules, ESM as first class citizen approch.
+- No SSR, the dashboard does not requite to be indexed or pre-rendered.
 - Enrich Styled with Tailwind setup.
 - Jotai for atomic way to handle application global state (close to ClojureScript atom concept)
 - Vitest for fast unit and e2e tests
@@ -30,6 +27,7 @@ Project setup includes Backend service, that runs locally via Docker.
 
 1. Start local server by going to `/server` folder and start Docker container.
 2. Clone repository, run `npm install`, `npm run dev`
+
 
 ## Basic functionality
 
@@ -41,7 +39,6 @@ The service implements basic login functionality with id and password, provided 
 
 - password reset logic: the default password is weak and we need to create a secure password, we would need to implement mandatory password reset after first login with strong password requirements
 - More e2e and unit tests needed: to ensure the correct state management, test Jotai atoms. I would test cookie expiration, login errors, Jotai state resets
-- type system improvements
 
 ### Dashboard
 
@@ -78,18 +75,18 @@ I suggest we add the following structure as API response:
 [
   {
     "timestamp": number,     // Acquisition Unix timestamp
-    "ore_sites":     number, // Number of detected ore sites
+    "ore_sites":  number, // Number of detected ore sites
     "detectorRange": number; // Range of the ore detector
     "location": {            // field for the detector's position when the ores were detected
-      "x": number;
-      "y": number;
-      "z": number;
+      "x": number,
+      "y": number,
+      "z": number
     };
     "detectedOres": {
-      "type": "Magnesium" | "Aluminium" | "Titanium" | "Iron"| "Chromium"; // Types of ores based on the most likely resources found on mars
-      "amount": number;         //  Represents the estimated quantity of ore detected
-      "distance": number;       //  Represents the distance from the ore detector to the ore deposit, measured in meters
-      "signalColor": "yellow";  // For the purpose of the API, we will assume all the data is of type ores
+      "type": "Magnesium" || "Aluminium" || "Titanium" || "Iron" || "Chromium"; // Types of ores based on the most likely resources found on mars
+      "amount": number,        //  Represents the estimated quantity of ore detected
+      "distance": number,       //  Represents the distance from the ore detector to the ore deposit, measured in meters
+      "signalColor": "yellow"  // For the purpose of the API, we will assume all the data is of type ores
     }[];
   }
 ]
