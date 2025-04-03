@@ -171,6 +171,7 @@ Some of them are denotes in comments in code.
    - Improve visual of loader
    - Add virtualisation for the list: https://www.patterns.dev/vanilla/virtual-lists/
    - configure proper VITE to VERCEL env variable transfer
+   - Add ore characteristics to tooltip on the histogram
 4. Idea:
    - Using WebGL, create a small 3d Model of mars and create a mesh sith ore concentration within the past 24h for better data visualisation
 

@@ -4,6 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --radius: 0.625rem;
   --background: hsl(
     14,
     20%,

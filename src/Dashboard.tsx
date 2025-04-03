@@ -2,7 +2,7 @@ import type { DashboardProps } from "./types";
 import { Button, Typography, Layout, Card } from "antd";
 import { User } from "./dashboard/User";
 import { DashboardLayout, DashboardCell } from "./dashboard/Layout";
-import { useAcquisitionsFetcher } from "./dashboard/Aquisitions";
+import { useAcquisitionsFetcher } from "./hooks/aquisitions";
 import { OresHistogram } from "./dashboard/OreHistogram";
 import { DataList } from "./dashboard/List";
 import { VideoStream } from "./dashboard/Video";
