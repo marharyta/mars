@@ -76,7 +76,12 @@ export const Dashboard = ({ onLogoutSuccess }: DashboardProps) => {
               <DashboardCell xs={24} md={8} lg={6}>
                 <VideoStream />
               </DashboardCell>
-              <DashboardCell xs={24} md={8} lg={6}>
+              <DashboardCell
+                xs={24}
+                md={8}
+                lg={6}
+                className="order-first md:order-none"
+              >
                 <User>
                   <Button
                     type="primary"

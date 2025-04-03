@@ -5,6 +5,7 @@ import { useRef } from "react";
 import type { OreExtended } from "../types";
 
 const SERVER_URL = "https://server-ancient-butterfly-346.fly.dev";
+// TODO: configure proper VITE to VERCEL env variable transfer
 // process.env.APP_ENV === "production"
 //   ? "https://server-ancient-butterfly-346.fly.dev"
 //   : "http://localhost:8080";
