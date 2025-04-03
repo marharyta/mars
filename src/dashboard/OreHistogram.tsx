@@ -8,8 +8,6 @@ import { Spin } from "antd";
 
 interface Error {
   message: string;
-  description: string;
-  statusCode: string | number;
 }
 
 // TODO: this component could use more refactoring to follow single responsibility principle
@@ -20,7 +18,7 @@ export const OresHistogram = ({
 }: {
   data: Ore[];
   loading: Boolean;
-  error: Error;
+  error: Error | null;
 }) => {
   if (error)
     return (

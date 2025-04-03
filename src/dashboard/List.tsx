@@ -8,8 +8,6 @@ import { useAtom } from "jotai";
 const { Text } = Typography;
 interface Error {
   message: string;
-  description: string;
-  statusCode: string | number;
 }
 
 // TODO: make sure Ore type is represented consistently
@@ -57,7 +55,7 @@ export const DataList = ({
 }: {
   data: Ore[];
   loading: Boolean;
-  error: Error;
+  error: Error | null;
 }) => {
   {
     /*

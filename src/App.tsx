@@ -49,6 +49,7 @@ const AppContent = () => {
 
 const logError = (error: Error, info: { componentStack: string }) => {
   // TODO: Do something with the error, e.g. log to an external API
+  console.error("Error massage", error, info);
 };
 
 function Fallback({
@@ -75,10 +76,8 @@ function App() {
   return (
     <ErrorBoundary
       FallbackComponent={Fallback}
+      //@ts-ignore
       onError={logError}
-      onReset={(details) => {
-        // TODO: Reset the state of your app so the error doesn't happen again
-      }}
     >
       <AuthProvider>
         <QueryClientProvider client={queryClient}>
