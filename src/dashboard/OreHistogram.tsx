@@ -1,15 +1,18 @@
 import { useEffect, useRef } from "react";
 import { Column } from "@antv/g2plot";
-import { DateTime } from "luxon";
-import tailwindColors from "tailwindcss/colors";
 import type { Ore } from "../types";
 import { zone } from "../atoms/zone";
 import { useAtom } from "jotai";
 import { groupByDay } from "../utils/groupBy";
-import { Skeleton } from "antd";
+import { Spin } from "antd";
 
-const colors = tailwindColors;
+interface Error {
+  message: string;
+  description: string;
+  statusCode: string | number;
+}
 
+// TODO: this component could use more refactoring to follow single responsibility principle
 export const OresHistogram = ({
   data,
   loading,
@@ -17,34 +20,39 @@ export const OresHistogram = ({
 }: {
   data: Ore[];
   loading: Boolean;
-  error: any;
+  error: Error;
 }) => {
-  console.log("OresHistogram re-render");
   if (error)
     return (
-      <div role="alert">
-        <p>Featching aquisitions data</p>
-        <pre>{error.message}</pre>
+      <div className="relative h-full rounded border">
+        <div className="w-full h-full flex flex-wrap justify-center items-center">
+          <div role="alert">
+            <p>Featching aquisitions data</p>
+            <pre>{error.message}</pre>
+          </div>
+        </div>
       </div>
     );
 
-  if (loading) return <Skeleton active paragraph={{ rows: 1 }} />;
+  if (loading)
+    return (
+      <div className="relative h-full rounded border">
+        <div className="w-full h-full flex flex-wrap justify-center items-center">
+          <Spin />
+        </div>
+      </div>
+    );
 
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<Column>(null);
   const [timeZone] = useAtom(zone);
 
-  console.log("colors.blue[400]", colors.blue[400]);
-
   useEffect(() => {
     if (!containerRef.current || !data?.length) return;
-    const histogramData = groupByDay(data, timeZone)
-      .map((point) => ({ time: point.date, ores: point.totalOreSites }))
-      .sort(
-        (a, b) =>
-          DateTime.fromFormat(a.time, "MMM dd").toMillis() -
-          DateTime.fromFormat(b.time, "MMM dd").toMillis()
-      );
+    const histogramData = groupByDay(data, timeZone).map((point) => ({
+      time: point.date,
+      ores: point.totalOreSites,
+    }));
 
     const histogram = new Column(containerRef.current, {
       data: histogramData,
@@ -63,8 +71,9 @@ export const OresHistogram = ({
           value: datum.ores,
         }),
       },
-      //TODO: add this to cause error
+      // TODO: add this to cause error
       // color: `${colors.blue[400]}`,
+      color: `orange`,
     });
 
     histogram.render();
@@ -75,5 +84,5 @@ export const OresHistogram = ({
     };
   }, [data, timeZone]);
 
-  return <div ref={containerRef} style={{ width: "100%", height: 400 }} />;
+  return <div ref={containerRef} className="w-full h-[280px]" />;
 };

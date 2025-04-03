@@ -1,5 +1,5 @@
 import { useAuth } from "../auth/AuthProvider";
-import { Row, Col } from "antd";
+import { Row, ColProps, Col } from "antd";
 import { ReactNode } from "react";
 
 interface DashboardLayoutApi {
@@ -21,12 +21,19 @@ export const DashboardLayout = ({
   );
 };
 
+interface DashboardCellProps extends ColProps {
+  span?: number;
+  children: ReactNode;
+}
+
 export function DashboardCell({
   span = 12,
   children,
-}: {
-  span?: number;
-  children: ReactNode;
-}) {
-  return <Col span={span}>{children}</Col>;
+  ...props
+}: DashboardCellProps) {
+  return (
+    <Col span={span} {...props}>
+      {children}
+    </Col>
+  );
 }

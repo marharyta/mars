@@ -1,9 +1,18 @@
 import { DateTime } from "luxon";
 import type { Ore } from "../types";
-import { Card, Typography, Skeleton } from "antd";
+import { Card, Typography, Spin } from "antd";
 import { memo } from "react";
-const { Text, Title } = Typography;
+import { zone } from "../atoms/zone";
+import { useAtom } from "jotai";
 
+const { Text } = Typography;
+interface Error {
+  message: string;
+  description: string;
+  statusCode: string | number;
+}
+
+// TODO: make sure Ore type is represented consistently
 const OreSiteCard = memo(
   ({
     timestamp,
@@ -14,23 +23,25 @@ const OreSiteCard = memo(
     ore_sites: number;
     index: number;
   }) => {
-    console.log("OreSiteCard re-render", index);
-    const formattedDate = DateTime.fromSeconds(timestamp).toLocaleString(
-      DateTime.DATE_FULL
-    );
+    const [timeZone] = useAtom(zone);
+
+    const formattedDate = DateTime.fromSeconds(timestamp)
+      .setZone(timeZone)
+      .toFormat("MMM dd yyyy hh:mm:ss");
 
     return (
       <Card
+        key={index}
         className="radius-xl shadow"
         style={{
           marginBottom: 16,
         }}
       >
-        <Title level={5} className="text-sm">
-          Ore Site Update {index}
-        </Title>
-        <Text type="secondary">Report Date: {formattedDate}</Text>
-        <div style={{ marginTop: 12 }}>
+        <Text className="!text-xs mb-3 block font-bold">Ore Site Update</Text>
+        <Text type="secondary">
+          Timestamp: {formattedDate} {timeZone}
+        </Text>
+        <div className="mt-3">
           <Text strong>Total Ore Sites: </Text>
           <Text>{ore_sites}</Text>
         </div>
@@ -46,29 +57,39 @@ export const DataList = ({
 }: {
   data: Ore[];
   loading: Boolean;
-  error: any;
+  error: Error;
 }) => {
   {
     /*
     TODO: 
-        1. Sort by latest ascending - done
-        2. add react-virtualized later - done
-        3. Add UI
+        1. add react-virtualized later ?
     */
   }
 
   if (error)
     return (
-      <div role="alert">
-        <p>Featching aquisitions data</p>
-        <pre>{error.message}</pre>
+      <div className="relative h-full rounded border">
+        <div className="w-full h-full flex flex-wrap justify-center items-center">
+          <div role="alert">
+            <p>Featching aquisitions data</p>
+            <pre>{error.message}</pre>
+          </div>
+        </div>
       </div>
     );
 
-  if (loading) return <Skeleton active paragraph={{ rows: 1 }} />;
+  if (loading)
+    return (
+      <div className="relative h-full rounded border">
+        <div className="w-full h-full flex flex-wrap justify-center items-center">
+          <Spin />
+        </div>
+      </div>
+    );
 
+  //TODO: refactor out the h-[280px] number
   return (
-    <ul className="h-[400px] overflow-y-auto">
+    <ul className="h-[280px] overflow-y-auto">
       {data?.map((d, index) => (
         <li key={index}>
           <OreSiteCard

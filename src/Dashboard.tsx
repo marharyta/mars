@@ -5,20 +5,30 @@ import { DashboardLayout, DashboardCell } from "./dashboard/Layout";
 import { useAcquisitionsFetcher } from "./dashboard/Aquisitions";
 import { OresHistogram } from "./dashboard/OreHistogram";
 import { DataList } from "./dashboard/List";
+import { VideoStream } from "./dashboard/Video";
+
+// TODO: refactor it into a theme variable on Ant Design Theme provider
+const MIN_HEIGHT = "min-h-[360px]";
 
 const { Title } = Typography;
 const { Header, Content } = Layout;
 
-const Scene = () => {
-  return <div id="scene-container">Mars goes here</div>;
-};
-
 const OreHistogramWrapper = () => {
   const { data, loading, error } = useAcquisitionsFetcher();
-  if (error) return <p>error</p>;
-  if (loading) return <p>loading ...</p>;
+  if (error)
+    return (
+      <Card title="Acquisition Data Error" className={MIN_HEIGHT}>
+        <DataList data={data} loading={true} error={error} />
+      </Card>
+    );
+  if (loading)
+    return (
+      <Card title="Acquisition Data Loading" className={MIN_HEIGHT}>
+        <DataList data={data} loading={loading} error={error} />
+      </Card>
+    );
   return (
-    <Card title="Acquisition Data">
+    <Card title="Acquisition Data" className={MIN_HEIGHT}>
       <OresHistogram data={data} loading={loading} error={error} />
     </Card>
   );
@@ -27,42 +37,46 @@ const OreHistogramWrapper = () => {
 const DataListWrapper = () => {
   const { data, loading, error } = useAcquisitionsFetcher();
 
-  if (error) return <p>error</p>;
-  if (loading) return <p>loading ...</p>;
+  if (error)
+    return (
+      <Card title="Acquisition Data List Error" className={MIN_HEIGHT}>
+        <DataList data={data} loading={loading} error={error} />
+      </Card>
+    );
+  if (loading)
+    return (
+      <Card title="Loading Latest Acquisition Updates" className={MIN_HEIGHT}>
+        <DataList data={data} loading={loading} error={error} />
+      </Card>
+    );
 
   return (
-    <Card title="Acquisition Data List">
-      <DataList data={data} loading={false} error={null} />
+    <Card title="Latest Acquisition Updates" className={MIN_HEIGHT}>
+      <DataList data={data} loading={loading} error={error} />
     </Card>
   );
 };
 
 export const Dashboard = ({ onLogoutSuccess }: DashboardProps) => {
-  // TODO: there is probably a more elegant way to design fetcher for aquisitions with atoms, but for now
-  // we use standard separation of concerns method to separate them
-  // The Aquisitions part of the dashboard will be using error handling
-
   return (
     <Layout>
       <Header className="flex flex-row justify-baseline items-baseline">
-        <Title level={2} className="text-xs">
-          dashboard
-        </Title>
+        <Title level={2}>dashboard</Title>
       </Header>
       <Content className="p-8">
         <DashboardLayout>
           {({ api }) => (
             <>
-              <DashboardCell>
+              <DashboardCell xs={24} md={16} lg={18}>
                 <OreHistogramWrapper />
               </DashboardCell>
-              <DashboardCell>
+              <DashboardCell xs={24} md={8} lg={6}>
                 <DataListWrapper />
               </DashboardCell>
-              <DashboardCell>
-                <Scene />
+              <DashboardCell xs={24} md={8} lg={6}>
+                <VideoStream />
               </DashboardCell>
-              <DashboardCell>
+              <DashboardCell xs={24} md={8} lg={6}>
                 <User>
                   <Button
                     type="primary"
@@ -71,7 +85,7 @@ export const Dashboard = ({ onLogoutSuccess }: DashboardProps) => {
                       await api.logout();
                       onLogoutSuccess();
                     }}
-                    style={{ marginTop: 20 }}
+                    className="mt-3"
                   >
                     Logout
                   </Button>

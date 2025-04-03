@@ -2,10 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { tokenAtom } from "../atoms/auth";
 import { useRef } from "react";
+import type { Ore } from "../types";
 
 export const useAcquisitionsFetcher = () => {
   const [token] = useAtom(tokenAtom);
-  const previousDataRef = useRef(null);
+  const previousDataRef = useRef<Ore[] | null>(null);
 
   const {
     data,
@@ -19,15 +20,15 @@ export const useAcquisitionsFetcher = () => {
           Authorization: `Bearer ${token}`,
         },
       }).then((res) => res.json()),
-    refetchInterval: 3000,
+    refetchInterval: 5000,
     refetchIntervalInBackground: true,
     select: (newData) => {
       const prev = previousDataRef.current;
 
       const isEqual =
         Array.isArray(prev) &&
-        prev.length === newData.length &&
-        prev.every((item, index) => {
+        prev?.length === newData.length &&
+        prev?.every((item: Ore, index: number) => {
           const newItem = newData[index];
           return (
             item.timestamp === newItem.timestamp &&
@@ -37,10 +38,9 @@ export const useAcquisitionsFetcher = () => {
 
       if (!isEqual) {
         previousDataRef.current = newData;
-        return newData.sort((a, b) => b.timestamp - a.timestamp);
+        return newData.sort((a: Ore, b: Ore) => b.timestamp - a.timestamp);
       }
 
-      // If equal, return the previous to avoid triggering rerenders
       return prev.sort((a, b) => b.timestamp - a.timestamp);
     },
   });
