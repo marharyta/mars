@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import type { OreExtended, OreType } from "../types";
-import { Card, Typography, Spin, Badge } from "antd";
+import { Card, Typography, Spin } from "antd";
 import { memo } from "react";
 import { zone } from "../atoms/zone";
 import { useAtom } from "jotai";

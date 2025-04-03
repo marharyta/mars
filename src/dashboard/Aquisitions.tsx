@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { tokenAtom } from "../atoms/auth";
 import { useRef } from "react";
-import type { Ore, OreExtended } from "../types";
+import type { OreExtended } from "../types";
 
 const SERVER_URL =
   import.meta.env.NODE_ENV === "production"
@@ -26,7 +26,7 @@ const ORE_TYPES = ["Magnesium", "Aluminium", "Titanium", "Iron", "Chromium"];
 
 export const useAcquisitionsFetcher = () => {
   const [token] = useAtom(tokenAtom);
-  const previousDataRef = useRef<Ore[] | null>(null);
+  const previousDataRef = useRef<OreExtended[] | null>(null);
 
   const {
     data,
@@ -102,7 +102,7 @@ export const useAcquisitionsFetcher = () => {
       if (!isEqual) {
         previousDataRef.current = enriched;
         return enriched.sort(
-          (a: Ore, b: Ore) =>
+          (a: OreExtended, b: OreExtended) =>
             new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
         );
       }
