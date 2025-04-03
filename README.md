@@ -168,6 +168,7 @@ Some of them are denotes in comments in code.
    - Some UI react components are duplicated, we would need to refactor and not duplicate them.
 3. Other:
    - functional style: use rambda and lodash to enhance code style, especially for data transformer styles
+   - Improve visual of loader
    - configure proper VITE to VERCEL env variable transfer
 4. Idea:
    - Using WebGL, create a small 3d Model of mars and create a mesh sith ore concentration within the past 24h for better data visualisation
