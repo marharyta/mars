@@ -9,6 +9,25 @@ export interface Ore {
   timestamp: number;
 }
 
+type OreType = "Magnesium" | "Aluminium" | "Titanium" | "Iron" | "Chromium";
+
+export interface OreExtended extends Ore {
+  ore_sites: number;
+  timestamp: number;
+  detectorRange: number;
+  location: {
+    x: number;
+    y: number;
+    z: number;
+  };
+  detectedOres: {
+    type: OreType;
+    amount: number;
+    distance: number;
+    signalColor: "yellow";
+  }[];
+}
+
 export interface UserProps {
   children: React.ReactNode;
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Column } from "@antv/g2plot";
-import type { Ore } from "../types";
+import type { OreExtended } from "../types";
 import { zone } from "../atoms/zone";
 import { useAtom } from "jotai";
 import { groupByDay } from "../utils/groupBy";
@@ -16,7 +16,7 @@ export const OresHistogram = ({
   loading,
   error,
 }: {
-  data: Ore[];
+  data: OreExtended[];
   loading: Boolean;
   error: Error | null;
 }) => {

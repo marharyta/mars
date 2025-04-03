@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import type { Ore } from "../types";
+import type { OreExtended } from "../types";
 import { Card, Typography, Spin } from "antd";
 import { memo } from "react";
 import { zone } from "../atoms/zone";
@@ -53,7 +53,7 @@ export const DataList = ({
   loading,
   error,
 }: {
-  data: Ore[];
+  data: OreExtended[];
   loading: Boolean;
   error: Error | null;
 }) => {
