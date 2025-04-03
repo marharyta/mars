@@ -11,6 +11,11 @@ import { setUserAtom } from "../atoms/user";
 import { setTokenAtom } from "../atoms/auth";
 import type { AuthContextType } from "../types";
 
+const SERVER_URL =
+  import.meta.env.NODE_ENV === "production"
+    ? "https://server-ancient-butterfly-346.fly.dev/8080"
+    : "http://localhost:8080";
+
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -26,7 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (user_id: string, password: string) => {
-    const response = await fetch("http://localhost:8080/token", {
+    const response = await fetch(`${SERVER_URL}/token`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ user_id, password }),

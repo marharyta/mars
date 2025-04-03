@@ -5,6 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, Spin } from "antd";
 import type { UserProps } from "../types";
 
+const SERVER_URL =
+  import.meta.env.NODE_ENV === "production"
+    ? "https://server-ancient-butterfly-346.fly.dev/8080"
+    : "http://localhost:8080";
+
 export const User: React.FC<UserProps> = ({ children }) => {
   const [token] = useAtom(tokenAtom);
   const [user] = useAtom(userAtom);
@@ -14,7 +19,7 @@ export const User: React.FC<UserProps> = ({ children }) => {
     queryKey: ["user", 1],
     queryFn: async () => {
       if (user?.user_id) {
-        const res = fetch(`http://localhost:8080/users/${user.user_id}`, {
+        const res = fetch(`${SERVER_URL}/users/${user.user_id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

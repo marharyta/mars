@@ -4,6 +4,11 @@ import { tokenAtom } from "../atoms/auth";
 import { useRef } from "react";
 import type { Ore } from "../types";
 
+const SERVER_URL =
+  import.meta.env.NODE_ENV === "production"
+    ? "https://server-ancient-butterfly-346.fly.dev/8080"
+    : "http://localhost:8080";
+
 export const useAcquisitionsFetcher = () => {
   const [token] = useAtom(tokenAtom);
   const previousDataRef = useRef<Ore[] | null>(null);
@@ -15,7 +20,7 @@ export const useAcquisitionsFetcher = () => {
   } = useQuery({
     queryKey: ["acquisitions", 1],
     queryFn: () =>
-      fetch(`http://localhost:8080/acquisitions`, {
+      fetch(`${SERVER_URL}/acquisitions`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
