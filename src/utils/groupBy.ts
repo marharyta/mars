@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import type { Ore } from "../types";
 
-export const groupByDay = (data: Ore[], timezone: any) => {
+export const groupByDay = (data: Ore[], timezone: string) => {
   return Object.entries(
     data.reduce<Record<string, number>>((acc, { timestamp, ore_sites }) => {
       const day = DateTime.fromSeconds(timestamp)
