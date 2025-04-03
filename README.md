@@ -1,4 +1,8 @@
-# Task summary
+# Dashboard for Mars
+
+# Demo
+
+The project has been deployed on fly.io and Vercel and you can find the live version here: https://mars-xi.vercel.app/
 
 ## Checklist
 
