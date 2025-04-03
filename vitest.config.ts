@@ -14,4 +14,7 @@ export default defineConfig({
       provider: "playwright",
     },
   },
+  define: {
+    APP_ENV: process.env.VITE_VERCEL_ENV,
+  },
 });

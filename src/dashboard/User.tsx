@@ -6,7 +6,7 @@ import { Card, Spin } from "antd";
 import type { UserProps } from "../types";
 
 const SERVER_URL =
-  import.meta.env.NODE_ENV === "production"
+  process.env.APP_ENV === "production"
     ? "https://server-ancient-butterfly-346.fly.dev"
     : "http://localhost:8080";
 
