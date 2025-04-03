@@ -9,7 +9,12 @@ export interface Ore {
   timestamp: number;
 }
 
-type OreType = "Magnesium" | "Aluminium" | "Titanium" | "Iron" | "Chromium";
+export type OreType =
+  | "Magnesium"
+  | "Aluminium"
+  | "Titanium"
+  | "Iron"
+  | "Chromium";
 
 export interface OreExtended extends Ore {
   ore_sites: number;

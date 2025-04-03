@@ -87,7 +87,7 @@ function App() {
               token: {
                 // Tailwind OKLCH color replacements
                 //TODO: use CSS vars
-                blue: colors.blue[500], //
+                blue: colors.blue[500],
                 purple: "oklch(0.627 0.265 303.9)", // purple.500
                 cyan: "oklch(0.715 0.143 215.221)", // cyan.500
                 green: "oklch(0.723 0.219 149.579)", // green.500
@@ -95,7 +95,7 @@ function App() {
                 pink: "oklch(0.645 0.246 16.439)", // rose.500
                 red: "oklch(0.637 0.237 25.331)", // red.500
                 orange: "oklch(0.705 0.213 47.604)", // orange.500
-                yellow: "oklch(0.795 0.184 86.047)", // yellow.500
+                yellow: colors.yellow[500],
                 volcano: "oklch(0.705 0.213 47.604)", // orange.500
                 geekblue: "oklch(0.623 0.214 259.815)", // blue.500
                 gold: "oklch(0.769 0.188 70.08)", // amber.500
