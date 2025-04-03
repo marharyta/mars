@@ -70,8 +70,6 @@ export const OresHistogram = ({
           value: datum.ores,
         }),
       },
-      // TODO: add this to cause error
-      // color: `${colors.blue[400]}`,
       color: `orange`,
     });
 

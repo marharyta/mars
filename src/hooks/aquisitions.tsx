@@ -48,7 +48,7 @@ export const useAcquisitionsFetcher = () => {
       // Enrich raw data
       const enriched = newData.map((item: any) => {
         const detectedOres = Array.from({ length: item.ore_sites }).map(
-          (_, i) => ({
+          (_) => ({
             type: ORE_TYPES[Math.floor(Math.random() * ORE_TYPES.length)],
             amount: parseFloat((Math.random() * 2000).toFixed(2)),
             distance: parseFloat((Math.random() * 150).toFixed(2)),
