@@ -2,18 +2,15 @@ import { setUserAtom, userAtom } from "../atoms/user";
 import { useAtom, useSetAtom } from "jotai";
 import { tokenAtom } from "../atoms/auth";
 import { useQuery } from "@tanstack/react-query";
-import { Card } from "antd";
+import { Card, Spin } from "antd";
+import type { UserProps } from "../types";
 
-export const User = ({ children }: React.ReactElement) => {
+export const User: React.FC<UserProps> = ({ children }) => {
   const [token] = useAtom(tokenAtom);
   const [user] = useAtom(userAtom);
   const setUser = useSetAtom(setUserAtom);
 
-  const {
-    data: userData,
-    isLoading: isLoadingUser,
-    error: errorFetchingUser,
-  } = useQuery({
+  const { isLoading: isLoadingUser, error: errorFetchingUser } = useQuery({
     queryKey: ["user", 1],
     queryFn: async () => {
       if (user?.user_id) {
@@ -29,12 +26,30 @@ export const User = ({ children }: React.ReactElement) => {
     },
   });
 
-  // TODO: nice loading state + nice error state
-  if (errorFetchingUser) return <p>Error loading user</p>;
-  if (isLoadingUser) return <p>Is loading user</p>;
+  // TODO: create a UI component wrapper for the error and loading messages
+  if (errorFetchingUser)
+    return (
+      <div className="relative h-full rounded border">
+        <div className="w-full h-full flex flex-wrap justify-center items-center">
+          <div role="alert">
+            <p>Featching user data</p>
+            <pre>{errorFetchingUser.message}</pre>
+          </div>
+        </div>
+      </div>
+    );
+
+  if (isLoadingUser)
+    return (
+      <div className="relative h-full rounded border">
+        <div className="w-full h-full flex flex-wrap justify-center items-center">
+          <Spin />
+        </div>
+      </div>
+    );
 
   return (
-    <Card title="User Info">
+    <Card title="User Information">
       <p>
         <strong>Name:</strong> {user?.name}
       </p>

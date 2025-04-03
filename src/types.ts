@@ -9,6 +9,10 @@ export interface Ore {
   timestamp: number;
 }
 
+export interface UserProps {
+  children: React.ReactNode;
+}
+
 export interface DashboardProps {
   onLogoutSuccess: () => void;
 }
