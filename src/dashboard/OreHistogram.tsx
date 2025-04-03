@@ -65,6 +65,7 @@ export const OresHistogram = ({
       tooltip: {
         fields: ["time", "ores"],
         formatter: (datum) => ({
+          // TODO: add ore characteristics to Dashboard
           name: "Ore Sites",
           value: datum.ores,
         }),
