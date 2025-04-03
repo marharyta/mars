@@ -13,7 +13,7 @@ import type { AuthContextType } from "../types";
 
 const SERVER_URL =
   import.meta.env.NODE_ENV === "production"
-    ? "https://server-ancient-butterfly-346.fly.dev/8080"
+    ? "https://server-ancient-butterfly-346.fly.dev"
     : "http://localhost:8080";
 
 const AuthContext = createContext<AuthContextType | null>(null);

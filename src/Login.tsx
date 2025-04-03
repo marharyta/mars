@@ -6,13 +6,13 @@ import type { LoginProps } from "./types";
 import { Layout, Typography, Form, Input, Card } from "antd";
 import { GradientButton } from "./components/ui/gradient-button";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { Content } = Layout;
 
 export const Login = ({ onLoginSuccess }: LoginProps) => {
-  //TODO: remove hardcoded values
   const [user_id, setUserId] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [loginError, setLoginError] = useState<string | null>(null);
   const { login } = useAuth();
 
   const setUser = useSetAtom(setUserAtom);
@@ -25,6 +25,8 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
       onLoginSuccess();
     } catch (error) {
       console.error("Login failed!", error);
+      const errorMessage = error?.toString();
+      setLoginError(errorMessage as string);
     }
   };
 
@@ -59,6 +61,7 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
               </GradientButton>
             </Form.Item>
           </Form>
+          {loginError && <Text className="text-red-600">{loginError}</Text>}
         </Card>
       </Content>
     </Layout>
