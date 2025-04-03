@@ -169,6 +169,7 @@ Some of them are denotes in comments in code.
 3. Other:
    - functional style: use rambda and lodash to enhance code style, especially for data transformer styles
    - Improve visual of loader
+   - Add virtualisation for the list: https://www.patterns.dev/vanilla/virtual-lists/
    - configure proper VITE to VERCEL env variable transfer
 4. Idea:
    - Using WebGL, create a small 3d Model of mars and create a mesh sith ore concentration within the past 24h for better data visualisation
