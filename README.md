@@ -161,6 +161,19 @@ Add support for query parameters:
 
 One possible idea would be to use Standardized Date Formats for timestamp would be more readable.
 
+Next steps:
+
+This code still requires quite a bit of work and improvements.
+Some of them are denotes in comments in code.
+Next steps:
+
+1. Error logging to a logging tool (Sentry, BugSnag, ex.)
+2. Refactor CSS variables matched between Ant Design and Tailwind
+3. configure proper VITE to VERCEL env variable transfer
+4. Remove magic px values from code, make it all 8px base though (0.5rem for most browsers with base fontsize 16px)
+5. Some UI react components are duplicated, we would need to refactor and not duplicate them.
+6. Test coverage: more e2e fir data fetching
+
 Useful links:
 
 - https://marsclock.com/
