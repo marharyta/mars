@@ -92,13 +92,19 @@ your way through a screencast of the UI.
 Apparently, it's not possible to get
 them a live remote desktop to do it themselves, and just sending them the data
 isn't enough for their _S.A.L.E.S._ team to do a correct interpretation, so you
-have to walk them through it. It would be nice if the acquisitions part shows
+have to walk them through it.
+
+It would be nice if the acquisitions part shows
 some graphs, maybe histograms or something.
 
 You'll have to create a frontend service with a user friendly UI for the
-provided API. This way, when the next crew arrives, they'll owe you one, which
+provided API.
+
+This way, when the next crew arrives, they'll owe you one, which
 in the space-station-in-the-middle-of-nowhere tradition means preferential
-access to the premium food and drinks while they last. Be creative, make it as
+access to the premium food and drinks while they last.
+
+Be creative, make it as
 useful as possible. And it would be nice if it looks good both on the station
 terminals and on the handheld crew devices.
 

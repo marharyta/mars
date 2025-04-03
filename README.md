@@ -6,12 +6,12 @@
 
 ## Features
 
-✅ Built with **React, TypeScript, and Ant Design** for an interactive UI.
-✅ Supports external libraries for performance and scalability.
-✅ Follows best practices for maintainability.
-✅ The UI should work on both normal-sized and small screens
-✅ Includes a **report for _LARVIS_ improvements**
-✅ Uses the `README.md` to describe the parts left out due to time and what to do next
+- ✅ Built with **React, TypeScript, and Ant Design** for an interactive UI.
+- ✅ Supports external libraries for performance and scalability.
+- ✅ Follows best practices for maintainability.
+- ✅ The UI should work on both normal-sized and small screens
+- ✅ Includes a **report for _LARVIS_ improvements**
+- ✅ Uses the `README.md` to describe the parts left out due to time and what to do next
 
 ## Front End setup approach
 
@@ -28,17 +28,11 @@
 1. Start local server by going to `/server` folder and start Docker container.
 2. Clone repository, run `npm install`, `npm run dev`
 
-
 ## Basic functionality
 
 ### Login
 
 The service implements basic login functionality with id and password, provided in the default configuration. Login/logout functionality has been tested with e2e tests.
-
-### TODO:
-
-- password reset logic: the default password is weak and we need to create a secure password, we would need to implement mandatory password reset after first login with strong password requirements
-- More e2e and unit tests needed: to ensure the correct state management, test Jotai atoms. I would test cookie expiration, login errors, Jotai state resets
 
 ### Dashboard
 
@@ -158,18 +152,25 @@ Add support for query parameters:
 
 One possible idea would be to use Standardized Date Formats for timestamp would be more readable.
 
-Next steps:
+### TODO: Next steps
 
 This code still requires quite a bit of work and improvements.
 Some of them are denotes in comments in code.
-Next steps:
 
-1. Error logging to a logging tool (Sentry, BugSnag, ex.)
-2. Refactor CSS variables matched between Ant Design and Tailwind
-3. configure proper VITE to VERCEL env variable transfer
-4. Remove magic px values from code, make it all 8px base though (0.5rem for most browsers with base fontsize 16px)
-5. Some UI react components are duplicated, we would need to refactor and not duplicate them.
-6. Test coverage: more e2e fir data fetching
+1. Improve Login & Password Security:
+   - Enforce strong passwords (min length, special characters).
+   - Implement mandatory password reset on first login (he default password is weak).
+   - Add Error Logging & Monitoring: Integrate Sentry or BugSnag for error tracking. Catch and map login error types to display better user logic.
+   - More e2e and unit tests needed: test cookie expiration handling, test Jotai atoms, test login errors in e2e.
+2. UI & Frontend Improvements:
+   - Refactor CSS variables matched between Ant Design and Tailwind
+   - Remove magic px values from code, make it all 8px base though (0.5rem for most browsers with base fontsize 16px)
+   - Some UI react components are duplicated, we would need to refactor and not duplicate them.
+3. Other:
+   - functional style: use rambda and lodash to enhance code style, especially for data transformer styles
+   - configure proper VITE to VERCEL env variable transfer
+4. Idea:
+   - Using WebGL, create a small 3d Model of mars and create a mesh sith ore concentration within the past 24h for better data visualisation
 
 Useful links:
 
